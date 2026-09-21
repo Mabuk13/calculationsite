@@ -1,231 +1,2093 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Cookie Developments - Shapelab</title>
+
 <style>
 :root{
-  --bg:#07090d; --panel:#0d1118; --panel2:#111722; --line:#202938;
-  --text:#edf3ff; --muted:#8490a5; --accent:#7c5cff; --accent2:#27d9ff;
-  --good:#52e38c; --danger:#ff637d; --shadow:0 20px 60px rgba(0,0,0,.35);
+  --bg:#07090d;
+  --panel:#0d1118;
+  --panel2:#111722;
+  --line:#202938;
+  --text:#edf3ff;
+  --muted:#8490a5;
+  --accent:#7c5cff;
+  --accent2:#27d9ff;
+  --good:#52e38c;
+  --danger:#ff637d;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
 }
+
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(circle at 15% 0%,#17122c 0,transparent 34%),radial-gradient(circle at 90% 10%,#062633 0,transparent 28%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 15% 0%,#17122c 0,transparent 34%),
+    radial-gradient(circle at 90% 10%,#062633 0,transparent 28%),
+    var(--bg);
+  color:var(--text);
+  font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;
+  min-height:100vh;
+}
+
 button,input,select{font:inherit}
-.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
-.sidebar{border-right:1px solid var(--line);padding:24px 16px;background:rgba(7,9,13,.82);backdrop-filter:blur(18px);position:sticky;top:0;height:100vh}
-.logo{font-weight:900;font-size:21px;letter-spacing:-.7px;margin:2px 10px 26px}
+
+.app{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  min-height:100vh;
+}
+
+.sidebar{
+  border-right:1px solid var(--line);
+  padding:24px 16px;
+  background:rgba(7,9,13,.82);
+  backdrop-filter:blur(18px);
+  position:sticky;
+  top:0;
+  height:100vh;
+}
+
+.logo{
+  font-weight:900;
+  font-size:21px;
+  letter-spacing:-.7px;
+  margin:2px 10px 26px;
+}
+
 .logo span{color:var(--accent2)}
-.nav-title{font-size:11px;color:#596579;text-transform:uppercase;letter-spacing:1.5px;margin:18px 10px 8px}
-.nav button{width:100%;text-align:left;border:1px solid transparent;background:transparent;color:#aeb8ca;padding:11px 12px;border-radius:10px;cursor:pointer;margin:2px 0}
-.nav button:hover,.nav button.active{background:#121824;border-color:#222d3e;color:#fff}
-.nav button.active{box-shadow:inset 2px 0 var(--accent2)}
-.main{padding:34px clamp(20px,4vw,56px);max-width:1300px;width:100%;margin:auto}
-.top{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:26px}
-.eyebrow{color:var(--accent2);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px}
-h1{font-size:clamp(30px,5vw,48px);line-height:1;margin:7px 0 9px;letter-spacing:-1.8px}
-.subtitle{color:var(--muted);max-width:720px}
-.search{width:240px;background:var(--panel);border:1px solid var(--line);padding:11px 13px;border-radius:10px;color:#fff;outline:none}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.card{background:linear-gradient(180deg,rgba(18,23,33,.96),rgba(11,15,22,.96));border:1px solid var(--line);border-radius:15px;padding:18px;cursor:pointer;transition:.18s;box-shadow:var(--shadow)}
-.card:hover{transform:translateY(-2px);border-color:#34445c}
-.card .icon{font-size:25px;margin-bottom:13px}
-.card h3{margin:0 0 5px;font-size:17px}
-.card p{margin:0;color:var(--muted);font-size:13px}
-.workspace{display:none;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:16px}
-.workspace.show{display:grid}
-.panel{background:linear-gradient(180deg,#0e131c,#0a0e14);border:1px solid var(--line);border-radius:15px;padding:22px;box-shadow:var(--shadow)}
-.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.panel h2{font-size:21px;margin:0;letter-spacing:-.5px}
-.back{background:#131923;color:#c7d0df;border:1px solid var(--line);border-radius:9px;padding:8px 11px;cursor:pointer}
-.controls{display:grid;gap:16px}
-.control label{display:flex;justify-content:space-between;color:#c8d1df;font-weight:650;margin-bottom:7px}
-.value{color:var(--accent2);font-variant-numeric:tabular-nums}
-input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
-.num{width:110px;background:#080c12;color:#fff;border:1px solid #293344;border-radius:8px;padding:7px 9px;text-align:right}
-.row{display:flex;gap:9px;align-items:center}
-.result{font-size:34px;font-weight:850;letter-spacing:-1px;margin:7px 0 1px}
-.formula{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#9aa6ba;background:#090d13;border:1px solid #1e2734;border-radius:9px;padding:11px;margin:15px 0}
-.results{display:grid;gap:11px}
-.resultbox{padding:13px 14px;border:1px solid var(--line);background:#0b1017;border-radius:10px}
-.resultbox small{display:block;color:#748095;font-size:11px;text-transform:uppercase;letter-spacing:1px}
-.resultbox strong{font-size:20px}
-.canvas{height:300px;border:1px solid #1c2634;border-radius:12px;background:radial-gradient(circle,#111a27 0, #080c12 65%);display:grid;place-items:center;overflow:hidden}
-svg{width:90%;height:90%}
-.note{color:#738096;font-size:12px;margin-top:15px}
-.unit{color:#6f7d92}
-.hidden{display:none!important}
-@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}.grid{grid-template-columns:repeat(2,1fr)}.workspace{grid-template-columns:1fr}}
-@media(max-width:580px){.grid{grid-template-columns:1fr}.top{display:block}.search{width:100%;margin-top:16px}.main{padding:24px 15px}}
+
+.nav-title{
+  font-size:11px;
+  color:#596579;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  margin:18px 10px 8px;
+}
+
+.nav button{
+  width:100%;
+  text-align:left;
+  border:1px solid transparent;
+  background:transparent;
+  color:#aeb8ca;
+  padding:11px 12px;
+  border-radius:10px;
+  cursor:pointer;
+  margin:2px 0;
+  transition:.2s;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:#121824;
+  border-color:#222d3e;
+  color:#fff;
+}
+
+.nav button.active{
+  box-shadow:inset 2px 0 var(--accent2);
+}
+
+.main{
+  padding:34px clamp(20px,4vw,56px);
+  max-width:1300px;
+  width:100%;
+  margin:auto;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:end;
+  margin-bottom:26px;
+}
+
+.eyebrow{
+  color:var(--accent2);
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+}
+
+h1{
+  font-size:clamp(30px,5vw,48px);
+  line-height:1;
+  margin:7px 0 9px;
+  letter-spacing:-1.8px;
+}
+
+.subtitle{
+  color:var(--muted);
+  max-width:720px;
+}
+
+.search{
+  width:240px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  padding:11px 13px;
+  border-radius:10px;
+  color:#fff;
+  outline:none;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.card{
+  background:linear-gradient(180deg,rgba(18,23,33,.96),rgba(11,15,22,.96));
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:18px;
+  cursor:pointer;
+  transition:.2s;
+  box-shadow:var(--shadow);
+}
+
+.card:hover{
+  transform:translateY(-4px) scale(1.01);
+  border-color:#34445c;
+}
+
+.card .icon{
+  font-size:25px;
+  margin-bottom:13px;
+}
+
+.card h3{
+  margin:0 0 5px;
+  font-size:17px;
+}
+
+.card p{
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.workspace{
+  display:none;
+  grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);
+  gap:16px;
+}
+
+.workspace.show{
+  display:grid;
+}
+
+.panel{
+  background:linear-gradient(180deg,#0e131c,#0a0e14);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+
+.panel-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.panel h2{
+  font-size:21px;
+  margin:0;
+  letter-spacing:-.5px;
+}
+
+.back{
+  background:#131923;
+  color:#c7d0df;
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:8px 11px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.back:hover{
+  background:#1a2230;
+}
+
+.controls{
+  display:grid;
+  gap:16px;
+}
+
+.control label{
+  display:flex;
+  justify-content:space-between;
+  color:#c8d1df;
+  font-weight:650;
+  margin-bottom:7px;
+}
+
+.value{
+  color:var(--accent2);
+  font-variant-numeric:tabular-nums;
+}
+
+input[type=range]{
+  width:100%;
+  accent-color:var(--accent);
+  cursor:pointer;
+}
+
+.num{
+  width:110px;
+  background:#080c12;
+  color:#fff;
+  border:1px solid #293344;
+  border-radius:8px;
+  padding:7px 9px;
+  text-align:right;
+}
+
+.row{
+  display:flex;
+  gap:9px;
+  align-items:center;
+}
+
+.result{
+  font-size:34px;
+  font-weight:850;
+  letter-spacing:-1px;
+  margin:7px 0 1px;
+}
+
+.formula{
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  color:#9aa6ba;
+  background:#090d13;
+  border:1px solid #1e2734;
+  border-radius:9px;
+  padding:11px;
+  margin:15px 0;
+}
+
+.results{
+  display:grid;
+  gap:11px;
+}
+
+.resultbox{
+  padding:13px 14px;
+  border:1px solid var(--line);
+  background:#0b1017;
+  border-radius:10px;
+  transition:.2s;
+}
+
+.resultbox:hover{
+  border-color:#34445c;
+  transform:translateX(2px);
+}
+
+.resultbox small{
+  display:block;
+  color:#748095;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+.resultbox strong{
+  font-size:20px;
+}
+
+.canvas{
+  height:300px;
+  border:1px solid #1c2634;
+  border-radius:12px;
+  background:
+    radial-gradient(circle,#111a27 0,#080c12 65%);
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  position:relative;
+}
+
+.canvas svg{
+  width:90%;
+  height:90%;
+  overflow:visible;
+}
+
+/* =========================
+   SVG ANIMATIONS
+========================= */
+
+.shape{
+  transition:
+    transform .35s ease,
+    opacity .35s ease,
+    stroke-width .25s ease;
+  transform-box:fill-box;
+  transform-origin:center;
+}
+
+.shape:hover{
+  stroke-width:4;
+  filter:drop-shadow(0 0 7px rgba(39,217,255,.45));
+}
+
+.draw{
+  stroke-dasharray:1000;
+  stroke-dashoffset:1000;
+  animation:draw .8s ease-out forwards;
+}
+
+.draw2{
+  stroke-dasharray:500;
+  stroke-dashoffset:500;
+  animation:draw .65s ease-out forwards;
+  animation-delay:.15s;
+}
+
+.draw3{
+  stroke-dasharray:500;
+  stroke-dashoffset:500;
+  animation:draw .65s ease-out forwards;
+  animation-delay:.3s;
+}
+
+.label{
+  opacity:0;
+  animation:labelIn .35s ease forwards;
+  animation-delay:.55s;
+}
+
+.dimension{
+  opacity:0;
+  animation:dimensionIn .4s ease forwards;
+  animation-delay:.35s;
+}
+
+.pulse{
+  animation:pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes draw{
+  to{
+    stroke-dashoffset:0;
+  }
+}
+
+@keyframes labelIn{
+  from{
+    opacity:0;
+    transform:translateY(5px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes dimensionIn{
+  from{
+    opacity:0;
+  }
+  to{
+    opacity:1;
+  }
+}
+
+@keyframes pulse{
+  0%,100%{
+    opacity:.7;
+  }
+  50%{
+    opacity:1;
+  }
+}
+
+.note{
+  color:#738096;
+  font-size:12px;
+  margin-top:15px;
+}
+
+.unit{
+  color:#6f7d92;
+}
+
+.hidden{
+  display:none!important;
+}
+
+@media(max-width:900px){
+  .app{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar{
+    position:relative;
+    height:auto;
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .workspace{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:580px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .top{
+    display:block;
+  }
+
+  .search{
+    width:100%;
+    margin-top:16px;
+  }
+
+  .main{
+    padding:24px 15px;
+  }
+}
 </style>
 </head>
+
 <body>
+
 <div class="app">
+
 <aside class="sidebar">
-  <div class="logo">Shape<span>Lab</span>-Cookie Developments</div>
+
+  <div class="logo">
+    Shape<span>Lab</span>-Cookie Developments
+  </div>
+
   <div class="nav-title">Calculators</div>
+
   <div class="nav">
     <button class="active" data-filter="all">⌘ All shapes</button>
     <button data-filter="2d">▱ 2D geometry</button>
     <button data-filter="3d">◇ 3D geometry</button>
     <button data-filter="angles">∠ Angles</button>
   </div>
+
   <div class="nav-title">Quick formulas</div>
+
   <div class="nav">
     <button onclick="openShape('circle')">○ Circle</button>
     <button onclick="openShape('triangle')">△ Triangle</button>
     <button onclick="openShape('cylinder')">◎ Cylinder</button>
     <button onclick="openShape('polygon')">⬡ Polygon</button>
   </div>
+
 </aside>
 
 <main class="main">
+
 <section id="home">
+
   <div class="top">
+
     <div>
       <div class="eyebrow">Geometry toolkit</div>
-      <h1>Calculate anything.<br><span style="color:#8b78ff">See how it works.</span></h1>
-      <div class="subtitle">Interactive sliders and live formulas for angles, areas, surface areas, volumes, circles, polygons and more.</div>
+
+      <h1>
+        Calculate anything.<br>
+        <span style="color:#8b78ff">
+          See how it works.
+        </span>
+      </h1>
+
+      <div class="subtitle">
+        Interactive sliders and live formulas for angles,
+        areas, surface areas, volumes, circles, polygons and more.
+      </div>
     </div>
-    <input id="search" class="search" placeholder="Search shapes…">
+
+    <input
+      id="search"
+      class="search"
+      placeholder="Search shapes…"
+    >
+
   </div>
+
   <div id="cards" class="grid"></div>
+
 </section>
 
+
 <section id="workspace" class="workspace">
+
   <div class="panel">
-    <div class="panel-head"><h2 id="shapeTitle">Circle</h2><button class="back" onclick="goHome()">← Shapes</button></div>
+
+    <div class="panel-head">
+      <h2 id="shapeTitle">Circle</h2>
+      <button class="back" onclick="goHome()">← Shapes</button>
+    </div>
+
     <div id="controls" class="controls"></div>
-    <div class="note">Use the sliders for quick calculations, or type an exact value into the box.</div>
+
+    <div class="note">
+      Change the sliders or type exact values.
+      The diagram updates interactively.
+    </div>
+
   </div>
+
+
   <div class="panel">
-    <div class="panel-head"><h2>Result</h2><span class="eyebrow">LIVE</span></div>
+
+    <div class="panel-head">
+      <h2>Result</h2>
+      <span class="eyebrow">LIVE</span>
+    </div>
+
     <div class="canvas" id="visual"></div>
+
     <div id="result" class="results"></div>
+
   </div>
+
 </section>
+
 </main>
 </div>
 
+
 <script>
+
+/* =========================================
+   SHAPE DATABASE
+========================================= */
+
 const shapes=[
- {id:'circle',cat:'2d',icon:'○',name:'Circle',desc:'Area, circumference and diameter',vars:[['r','Radius',1,20,0.5,'units']]},
- {id:'triangle',cat:'2d',icon:'△',name:'Triangle',desc:'Area and perimeter from base/height',vars:[['b','Base',1,20,0.5,'units'],['h','Height',1,20,0.5,'units'],['a','Side A',1,20,0.5,'units'],['c','Side C',1,20,0.5,'units']]},
- {id:'rectangle',cat:'2d',icon:'▭',name:'Rectangle',desc:'Area, perimeter and diagonal',vars:[['w','Width',1,30,1,'units'],['h','Height',1,30,1,'units']]},
- {id:'square',cat:'2d',icon:'□',name:'Square',desc:'Area, perimeter and diagonal',vars:[['s','Side',1,30,1,'units']]},
- {id:'trapezoid',cat:'2d',icon:'⏢',name:'Trapezoid',desc:'Area and perimeter',vars:[['a','Top base',1,20,0.5,'units'],['b','Bottom base',1,30,0.5,'units'],['h','Height',1,20,0.5,'units'],['c','Side C',1,20,0.5,'units'],['d','Side D',1,20,0.5,'units']]},
- {id:'polygon',cat:'angles',icon:'⬡',name:'Regular polygon',desc:'Interior/exterior angles and angle sum',vars:[['n','Number of sides',3,20,1,'sides']]},
- {id:'prism',cat:'3d',icon:'▣',name:'Rectangular prism',desc:'Volume, surface area and space diagonal',vars:[['l','Length',1,20,0.5,'units'],['w','Width',1,20,0.5,'units'],['h','Height',1,20,0.5,'units']]},
- {id:'cube',cat:'3d',icon:'◇',name:'Cube',desc:'Volume, surface area and diagonal',vars:[['s','Side',1,20,0.5,'units']]},
- {id:'cylinder',cat:'3d',icon:'◎',name:'Cylinder',desc:'Volume, surface area and circumference',vars:[['r','Radius',1,20,0.5,'units'],['h','Height',1,30,0.5,'units']]},
- {id:'cone',cat:'3d',icon:'△',name:'Cone',desc:'Volume, surface area and slant height',vars:[['r','Radius',1,20,0.5,'units'],['h','Height',1,30,0.5,'units']]},
- {id:'sphere',cat:'3d',icon:'●',name:'Sphere',desc:'Volume and surface area',vars:[['r','Radius',1,20,0.5,'units']]},
- {id:'angles',cat:'angles',icon:'∠',name:'Triangle angles',desc:'Find the missing angle',vars:[['a','Angle A',1,178,1,'°'],['b','Angle B',1,178,1,'°']]}
+
+ {
+  id:'circle',
+  cat:'2d',
+  icon:'○',
+  name:'Circle',
+  desc:'Area, circumference and diameter',
+  vars:[
+   ['r','Radius',1,20,.5,'units']
+  ]
+ },
+
+ {
+  id:'triangle',
+  cat:'2d',
+  icon:'△',
+  name:'Triangle',
+  desc:'Area and perimeter from base/height',
+  vars:[
+   ['b','Base',1,20,.5,'units'],
+   ['h','Height',1,20,.5,'units'],
+   ['a','Side A',1,20,.5,'units'],
+   ['c','Side C',1,20,.5,'units']
+  ]
+ },
+
+ {
+  id:'rectangle',
+  cat:'2d',
+  icon:'▭',
+  name:'Rectangle',
+  desc:'Area, perimeter and diagonal',
+  vars:[
+   ['w','Width',1,30,1,'units'],
+   ['h','Height',1,30,1,'units']
+  ]
+ },
+
+ {
+  id:'square',
+  cat:'2d',
+  icon:'□',
+  name:'Square',
+  desc:'Area, perimeter and diagonal',
+  vars:[
+   ['s','Side',1,30,1,'units']
+  ]
+ },
+
+ {
+  id:'trapezoid',
+  cat:'2d',
+  icon:'⏢',
+  name:'Trapezoid',
+  desc:'Area and perimeter',
+  vars:[
+   ['a','Top base',1,20,.5,'units'],
+   ['b','Bottom base',1,30,.5,'units'],
+   ['h','Height',1,20,.5,'units'],
+   ['c','Side C',1,20,.5,'units'],
+   ['d','Side D',1,20,.5,'units']
+  ]
+ },
+
+ {
+  id:'polygon',
+  cat:'angles',
+  icon:'⬡',
+  name:'Regular polygon',
+  desc:'Interior/exterior angles and angle sum',
+  vars:[
+   ['n','Number of sides',3,20,1,'sides']
+  ]
+ },
+
+ {
+  id:'prism',
+  cat:'3d',
+  icon:'▣',
+  name:'Rectangular prism',
+  desc:'Volume, surface area and space diagonal',
+  vars:[
+   ['l','Length',1,20,.5,'units'],
+   ['w','Width',1,20,.5,'units'],
+   ['h','Height',1,20,.5,'units']
+  ]
+ },
+
+ {
+  id:'cube',
+  cat:'3d',
+  icon:'◇',
+  name:'Cube',
+  desc:'Volume, surface area and diagonal',
+  vars:[
+   ['s','Side',1,20,.5,'units']
+  ]
+ },
+
+ {
+  id:'cylinder',
+  cat:'3d',
+  icon:'◎',
+  name:'Cylinder',
+  desc:'Volume, surface area and circumference',
+  vars:[
+   ['r','Radius',1,20,.5,'units'],
+   ['h','Height',1,30,.5,'units']
+  ]
+ },
+
+ {
+  id:'cone',
+  cat:'3d',
+  icon:'△',
+  name:'Cone',
+  desc:'Volume, surface area and slant height',
+  vars:[
+   ['r','Radius',1,20,.5,'units'],
+   ['h','Height',1,30,.5,'units']
+  ]
+ },
+
+ {
+  id:'sphere',
+  cat:'3d',
+  icon:'●',
+  name:'Sphere',
+  desc:'Volume and surface area',
+  vars:[
+   ['r','Radius',1,20,.5,'units']
+  ]
+ },
+
+ {
+  id:'angles',
+  cat:'angles',
+  icon:'∠',
+  name:'Triangle angles',
+  desc:'Find the missing angle',
+  vars:[
+   ['a','Angle A',1,178,1,'°'],
+   ['b','Angle B',1,178,1,'°']
+  ]
+ }
+
 ];
 
-let current=null, values={};
+
+/* =========================================
+   STATE
+========================================= */
+
+let current=null;
+let values={};
+
+
+/* =========================================
+   CARDS
+========================================= */
 
 const cards=document.getElementById('cards');
+
 function renderCards(filter='all',query=''){
- cards.innerHTML=shapes.filter(s=>(filter==='all'||s.cat===filter)&&((s.name+' '+s.desc).toLowerCase().includes(query.toLowerCase())))
- .map(s=>`<div class="card" onclick="openShape('${s.id}')"><div class="icon">${s.icon}</div><h3>${s.name}</h3><p>${s.desc}</p></div>`).join('');
+
+  cards.innerHTML=shapes
+
+  .filter(s=>
+    (filter==='all'||s.cat===filter) &&
+    ((s.name+' '+s.desc)
+      .toLowerCase()
+      .includes(query.toLowerCase()))
+  )
+
+  .map(s=>`
+
+    <div class="card"
+         onclick="openShape('${s.id}')">
+
+      <div class="icon">${s.icon}</div>
+
+      <h3>${s.name}</h3>
+
+      <p>${s.desc}</p>
+
+    </div>
+
+  `).join('');
 }
+
 renderCards();
 
-document.querySelectorAll('.nav button[data-filter]').forEach(b=>b.onclick=()=>{
- document.querySelectorAll('.nav button[data-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');
- renderCards(b.dataset.filter,document.getElementById('search').value);
+
+/* =========================================
+   NAV FILTER
+========================================= */
+
+document
+.querySelectorAll('.nav button[data-filter]')
+.forEach(b=>{
+
+  b.onclick=()=>{
+
+    document
+    .querySelectorAll('.nav button[data-filter]')
+    .forEach(x=>x.classList.remove('active'));
+
+    b.classList.add('active');
+
+    renderCards(
+      b.dataset.filter,
+      document.getElementById('search').value
+    );
+
+  };
+
 });
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
 document.getElementById('search').oninput=e=>{
- const active=document.querySelector('.nav button.active')?.dataset.filter||'all';renderCards(active,e.target.value);
+
+  const active=
+    document
+    .querySelector('.nav button.active')
+    ?.dataset.filter || 'all';
+
+  renderCards(active,e.target.value);
+
 };
 
+
+/* =========================================
+   OPEN SHAPE
+========================================= */
+
 function openShape(id){
- current=shapes.find(s=>s.id===id);values={};
- current.vars.forEach(v=>values[v[0]]=v[0]==='n'?6:v[2]);
- document.getElementById('home').classList.add('hidden');
- document.getElementById('workspace').classList.add('show');
- document.getElementById('shapeTitle').textContent=current.name;
- buildControls();calculate();
+
+  current=shapes.find(s=>s.id===id);
+
+  values={};
+
+  current.vars.forEach(v=>{
+    values[v[0]]=v[0]==='n'
+      ?6
+      :v[2];
+  });
+
+  document
+  .getElementById('home')
+  .classList.add('hidden');
+
+  document
+  .getElementById('workspace')
+  .classList.add('show');
+
+  document
+  .getElementById('shapeTitle')
+  .textContent=current.name;
+
+  buildControls();
+  calculate();
 }
-function goHome(){document.getElementById('workspace').classList.remove('show');document.getElementById('home').classList.remove('hidden')}
+
+
+/* =========================================
+   HOME
+========================================= */
+
+function goHome(){
+
+  document
+  .getElementById('workspace')
+  .classList.remove('show');
+
+  document
+  .getElementById('home')
+  .classList.remove('hidden');
+
+}
+
+
+/* =========================================
+   CONTROLS
+========================================= */
 
 function buildControls(){
- const c=document.getElementById('controls');
- c.innerHTML=current.vars.map(v=>`
- <div class="control">
-   <label><span>${v[1]}</span><span class="value" id="out-${v[0]}">${fmt(values[v[0]])} ${v[5]}</span></label>
-   <div class="row"><input id="range-${v[0]}" type="range" min="${v[2]}" max="${v[3]}" step="${v[4]}" value="${values[v[0]]}" oninput="setVal('${v[0]}',this.value)"><input class="num" id="num-${v[0]}" type="number" min="${v[2]}" max="${v[3]}" step="${v[4]}" value="${values[v[0]]}" oninput="setVal('${v[0]}',this.value)"></div>
- </div>`).join('');
+
+  const c=document.getElementById('controls');
+
+  c.innerHTML=current.vars.map(v=>`
+
+    <div class="control">
+
+      <label>
+
+        <span>${v[1]}</span>
+
+        <span
+          class="value"
+          id="out-${v[0]}"
+        >
+          ${fmt(values[v[0]])} ${v[5]}
+        </span>
+
+      </label>
+
+      <div class="row">
+
+        <input
+          id="range-${v[0]}"
+          type="range"
+          min="${v[2]}"
+          max="${v[3]}"
+          step="${v[4]}"
+          value="${values[v[0]]}"
+          oninput="setVal('${v[0]}',this.value)"
+        >
+
+        <input
+          class="num"
+          id="num-${v[0]}"
+          type="number"
+          min="${v[2]}"
+          max="${v[3]}"
+          step="${v[4]}"
+          value="${values[v[0]]}"
+          oninput="setVal('${v[0]}',this.value)"
+        >
+
+      </div>
+
+    </div>
+
+  `).join('');
+
 }
+
+
+/* =========================================
+   SET VALUE
+========================================= */
+
 function setVal(k,v){
- let n=Number(v); if(!Number.isFinite(n))return;
- values[k]=n;
- document.getElementById('range-'+k).value=n;document.getElementById('num-'+k).value=n;
- const unit=current.vars.find(x=>x[0]===k)[5];document.getElementById('out-'+k).textContent=fmt(n)+' '+unit;calculate();
+
+  let n=Number(v);
+
+  if(!Number.isFinite(n)) return;
+
+  const definition=
+    current.vars.find(x=>x[0]===k);
+
+  n=Math.max(
+    definition[2],
+    Math.min(definition[3],n)
+  );
+
+  values[k]=n;
+
+  document.getElementById('range-'+k).value=n;
+
+  document.getElementById('num-'+k).value=n;
+
+  document.getElementById('out-'+k).textContent=
+    fmt(n)+' '+definition[5];
+
+  calculate();
 }
-function fmt(n){return Number.isInteger(n)?n:n.toFixed(2).replace(/0+$/,'').replace(/\.$/,'')}
+
+
+/* =========================================
+   NUMBER FORMAT
+========================================= */
+
+function fmt(n){
+
+  if(!Number.isFinite(n)) return '—';
+
+  return Number.isInteger(n)
+    ?n
+    :n.toFixed(2)
+      .replace(/0+$/,'')
+      .replace(/\.$/,'');
+
+}
+
+
+/* =========================================
+   CALCULATIONS
+========================================= */
 
 function calculate(){
- const v=values,r=Math.PI;
- let items=[], formula='';
- if(current.id==='circle'){
-  items=[['Area',r*v.r*v.r,'units²'],['Circumference',2*r*v.r,'units'],['Diameter',2*v.r,'units']];
-  formula='A = πr²   |   C = 2πr';
- }else if(current.id==='triangle'){
-  items=[['Area',.5*v.b*v.h,'units²'],['Perimeter',v.a+v.b+v.c,'units']];
-  formula='A = ½bh   |   P = a + b + c';
- }else if(current.id==='rectangle'){
-  items=[['Area',v.w*v.h,'units²'],['Perimeter',2*(v.w+v.h),'units'],['Diagonal',Math.hypot(v.w,v.h),'units']];
-  formula='A = wh   |   P = 2(w+h)   |   d = √(w²+h²)';
- }else if(current.id==='square'){
-  items=[['Area',v.s*v.s,'units²'],['Perimeter',4*v.s,'units'],['Diagonal',v.s*Math.SQRT2,'units']];
-  formula='A = s²   |   P = 4s   |   d = s√2';
- }else if(current.id==='trapezoid'){
-  items=[['Area',((v.a+v.b)/2)*v.h,'units²'],['Perimeter',v.a+v.b+v.c+v.d,'units']];
-  formula='A = ½(a+b)h   |   P = a+b+c+d';
- }else if(current.id==='polygon'){
-  const sum=(v.n-2)*180, interior=sum/v.n, exterior=360/v.n;
-  items=[['Interior angle',interior,'°'],['Exterior angle',exterior,'°'],['Interior angle sum',sum,'°']];
-  formula='Interior = (n−2)×180° ÷ n';
- }else if(current.id==='prism'){
-  items=[['Volume',v.l*v.w*v.h,'units³'],['Surface area',2*(v.l*v.w+v.l*v.h+v.w*v.h),'units²'],['Space diagonal',Math.hypot(v.l,v.w,v.h),'units']];
-  formula='V = lwh   |   SA = 2(lw+lh+wh)';
- }else if(current.id==='cube'){
-  items=[['Volume',v.s**3,'units³'],['Surface area',6*v.s*v.s,'units²'],['Space diagonal',v.s*Math.sqrt(3),'units']];
-  formula='V = s³   |   SA = 6s²   |   d = s√3';
- }else if(current.id==='cylinder'){
-  items=[['Volume',r*v.r*v.r*v.h,'units³'],['Surface area',2*r*v.r*v.r+2*r*v.r*v.h,'units²'],['Circumference',2*r*v.r,'units']];
-  formula='V = πr²h   |   SA = 2πr² + 2πrh';
- }else if(current.id==='cone'){
-  const l=Math.hypot(v.r,v.h);
-  items=[['Volume',r*v.r*v.r*v.h/3,'units³'],['Surface area',r*v.r*(v.r+l),'units²'],['Slant height',l,'units']];
-  formula='V = ⅓πr²h   |   SA = πr(r+l)';
- }else if(current.id==='sphere'){
-  items=[['Volume',4*r*v.r**3/3,'units³'],['Surface area',4*r*v.r*v.r,'units²'],['Circumference',2*r*v.r,'units']];
-  formula='V = ⁴⁄₃πr³   |   SA = 4πr²';
- }else if(current.id==='angles'){
-  const missing=180-v.a-v.b;
-  items=[['Angle C',missing,'°'],['Angle sum',180,'°']];
-  formula='A + B + C = 180°';
- }
- document.getElementById('result').innerHTML=`<div class="formula">${formula}</div>`+
- items.map((x,i)=>`<div class="resultbox"><small>${x[0]}</small><strong>${fmt(x[1])} <span class="unit">${x[2]}</span></strong></div>`).join('');
- draw();
+
+  const v=values;
+  const pi=Math.PI;
+
+  let items=[];
+  let formula='';
+
+
+  if(current.id==='circle'){
+
+    items=[
+      ['Area',pi*v.r*v.r,'units²'],
+      ['Circumference',2*pi*v.r,'units'],
+      ['Diameter',2*v.r,'units']
+    ];
+
+    formula='A = πr²   |   C = 2πr';
+
+  }
+
+
+  else if(current.id==='triangle'){
+
+    items=[
+      ['Area',.5*v.b*v.h,'units²'],
+      ['Perimeter',v.a+v.b+v.c,'units']
+    ];
+
+    formula='A = ½bh   |   P = a + b + c';
+
+  }
+
+
+  else if(current.id==='rectangle'){
+
+    items=[
+      ['Area',v.w*v.h,'units²'],
+      ['Perimeter',2*(v.w+v.h),'units'],
+      ['Diagonal',Math.hypot(v.w,v.h),'units']
+    ];
+
+    formula='A = wh   |   P = 2(w+h)   |   d = √(w²+h²)';
+
+  }
+
+
+  else if(current.id==='square'){
+
+    items=[
+      ['Area',v.s*v.s,'units²'],
+      ['Perimeter',4*v.s,'units'],
+      ['Diagonal',v.s*Math.SQRT2,'units']
+    ];
+
+    formula='A = s²   |   P = 4s   |   d = s√2';
+
+  }
+
+
+  else if(current.id==='trapezoid'){
+
+    items=[
+      ['Area',((v.a+v.b)/2)*v.h,'units²'],
+      ['Perimeter',v.a+v.b+v.c+v.d,'units']
+    ];
+
+    formula='A = ½(a+b)h   |   P = a+b+c+d';
+
+  }
+
+
+  else if(current.id==='polygon'){
+
+    const sum=(v.n-2)*180;
+    const interior=sum/v.n;
+    const exterior=360/v.n;
+
+    items=[
+      ['Interior angle',interior,'°'],
+      ['Exterior angle',exterior,'°'],
+      ['Interior angle sum',sum,'°']
+    ];
+
+    formula='Interior = (n−2)×180° ÷ n';
+
+  }
+
+
+  else if(current.id==='prism'){
+
+    items=[
+      ['Volume',v.l*v.w*v.h,'units³'],
+      ['Surface area',2*(v.l*v.w+v.l*v.h+v.w*v.h),'units²'],
+      ['Space diagonal',Math.hypot(v.l,v.w,v.h),'units']
+    ];
+
+    formula='V = lwh   |   SA = 2(lw+lh+wh)';
+
+  }
+
+
+  else if(current.id==='cube'){
+
+    items=[
+      ['Volume',v.s**3,'units³'],
+      ['Surface area',6*v.s*v.s,'units²'],
+      ['Space diagonal',v.s*Math.sqrt(3),'units']
+    ];
+
+    formula='V = s³   |   SA = 6s²   |   d = s√3';
+
+  }
+
+
+  else if(current.id==='cylinder'){
+
+    items=[
+      ['Volume',pi*v.r*v.r*v.h,'units³'],
+      ['Surface area',2*pi*v.r*v.r+2*pi*v.r*v.h,'units²'],
+      ['Circumference',2*pi*v.r,'units']
+    ];
+
+    formula='V = πr²h   |   SA = 2πr² + 2πrh';
+
+  }
+
+
+  else if(current.id==='cone'){
+
+    const l=Math.hypot(v.r,v.h);
+
+    items=[
+      ['Volume',pi*v.r*v.r*v.h/3,'units³'],
+      ['Surface area',pi*v.r*(v.r+l),'units²'],
+      ['Slant height',l,'units']
+    ];
+
+    formula='V = ⅓πr²h   |   SA = πr(r+l)';
+
+  }
+
+
+  else if(current.id==='sphere'){
+
+    items=[
+      ['Volume',4*pi*v.r**3/3,'units³'],
+      ['Surface area',4*pi*v.r*v.r,'units²'],
+      ['Circumference',2*pi*v.r,'units']
+    ];
+
+    formula='V = ⁴⁄₃πr³   |   SA = 4πr²';
+
+  }
+
+
+  else if(current.id==='angles'){
+
+    const missing=180-v.a-v.b;
+
+    items=[
+      ['Angle C',missing,'°'],
+      ['Angle sum',180,'°']
+    ];
+
+    formula='A + B + C = 180°';
+
+  }
+
+
+  document.getElementById('result').innerHTML=
+
+    `<div class="formula">${formula}</div>`+
+
+    items.map(x=>`
+
+      <div class="resultbox">
+
+        <small>${x[0]}</small>
+
+        <strong>
+          ${fmt(x[1])}
+          <span class="unit">${x[2]}</span>
+        </strong>
+
+      </div>
+
+    `).join('');
+
+
+  draw();
+
 }
+
+
+/* =========================================
+   SVG HELPERS
+========================================= */
+
+function line(x1,y1,x2,y2,cls='dimension'){
+
+  return `
+    <line
+      class="${cls}"
+      x1="${x1}"
+      y1="${y1}"
+      x2="${x2}"
+      y2="${y2}"
+      stroke="#7c5cff"
+      stroke-width="2"
+    />
+  `;
+
+}
+
+function text(x,y,t,cls='label'){
+
+  return `
+    <text
+      class="${cls}"
+      x="${x}"
+      y="${y}"
+      fill="#aab5c8"
+      text-anchor="middle"
+      font-size="13"
+    >
+      ${t}
+    </text>
+  `;
+
+}
+
+
+/* =========================================
+   DRAW EVERYTHING
+========================================= */
+
 function draw(){
- const el=document.getElementById('visual');
- const id=current.id;
- let svg='<svg viewBox="0 0 400 260" aria-label="shape visualization">';
- if(id==='circle'||id==='sphere') svg+=`<circle cx="200" cy="130" r="75" fill="none" stroke="#27d9ff" stroke-width="3"/><line x1="200" y1="130" x2="275" y2="130" stroke="#7c5cff" stroke-width="3"/><text x="235" y="120" fill="#aab5c8">r</text>`;
- else if(id==='cylinder') svg+=`<ellipse cx="200" cy="65" rx="75" ry="24" fill="none" stroke="#27d9ff" stroke-width="3"/><ellipse cx="200" cy="195" rx="75" ry="24" fill="none" stroke="#27d9ff" stroke-width="3"/><line x1="125" y1="65" x2="125" y2="195" stroke="#27d9ff" stroke-width="3"/><line x1="275" y1="65" x2="275" y2="195" stroke="#27d9ff" stroke-width="3"/><line x1="200" y1="65" x2="275" y2="65" stroke="#7c5cff" stroke-width="3"/><text x="235" y="56" fill="#aab5c8">r</text>`;
- else if(id==='cone') svg+=`<path d="M200 35 L120 205 Q200 235 280 205 Z" fill="none" stroke="#27d9ff" stroke-width="3"/><ellipse cx="200" cy="205" rx="80" ry="27" fill="none" stroke="#27d9ff" stroke-width="3"/><line x1="200" y1="35" x2="200" y2="205" stroke="#7c5cff" stroke-width="3"/>`;
- else if(id==='triangle'||id==='angles') svg+=`<path d="M200 35 L90 210 L315 210 Z" fill="none" stroke="#27d9ff" stroke-width="3"/><text x="190" y="28" fill="#aab5c8">A</text><text x="72" y="225" fill="#aab5c8">B</text><text x="318" y="225" fill="#aab5c8">C</text>`;
- else if(id==='polygon'){let n=Math.max(3,Math.round(values.n)),pts=[];for(let i=0;i<n;i++){let a=-Math.PI/2+i*2*Math.PI/n;pts.push((200+90*Math.cos(a))+','+(130+90*Math.sin(a)))}svg+=`<polygon points="${pts.join(' ')}" fill="none" stroke="#27d9ff" stroke-width="3"/>`;}
- else svg+=`<rect x="105" y="65" width="190" height="130" rx="5" fill="none" stroke="#27d9ff" stroke-width="3"/><line x1="105" y1="210" x2="295" y2="210" stroke="#7c5cff" stroke-width="3"/><line x1="315" y1="65" x2="315" y2="195" stroke="#7c5cff" stroke-width="3"/>`;
- svg+='</svg>';el.innerHTML=svg;
+
+  const el=document.getElementById('visual');
+  const id=current.id;
+  const v=values;
+
+  let svg=`
+    <svg
+      viewBox="0 0 400 260"
+      aria-label="Interactive shape visualization"
+    >
+  `;
+
+
+  /* ==============================
+     CIRCLE
+  ============================== */
+
+  if(id==='circle'){
+
+    const radius=Math.max(
+      20,
+      Math.min(105,25+v.r*4)
+    );
+
+    svg+=`
+
+      <circle
+        class="shape draw pulse"
+        cx="200"
+        cy="130"
+        r="${radius}"
+        fill="rgba(39,217,255,.04)"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      ${line(
+        200,
+        130,
+        200+radius,
+        130
+      )}
+
+      ${text(
+        200+radius/2,
+        120,
+        'r'
+      )}
+
+    `;
+
+  }
+
+
+  /* ==============================
+     SPHERE
+  ============================== */
+
+  else if(id==='sphere'){
+
+    const radius=Math.max(
+      30,
+      Math.min(100,25+v.r*4)
+    );
+
+    svg+=`
+
+      <circle
+        class="shape draw pulse"
+        cx="200"
+        cy="130"
+        r="${radius}"
+        fill="rgba(39,217,255,.06)"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <ellipse
+        class="shape draw2"
+        cx="200"
+        cy="130"
+        rx="${radius}"
+        ry="${radius*.32}"
+        fill="none"
+        stroke="#7c5cff"
+        stroke-width="2"
+      />
+
+      <ellipse
+        class="shape draw3"
+        cx="200"
+        cy="130"
+        rx="${radius*.32}"
+        ry="${radius}"
+        fill="none"
+        stroke="#7c5cff"
+        stroke-width="2"
+        opacity=".7"
+      />
+
+      ${line(
+        200,
+        130,
+        200+radius,
+        130
+      )}
+
+      ${text(
+        200+radius/2,
+        120,
+        'r'
+      )}
+
+    `;
+
+  }
+
+
+  /* ==============================
+     TRIANGLE
+  ============================== */
+
+  else if(id==='triangle'||id==='angles'){
+
+    let base=Math.max(100,Math.min(270,v.b*11));
+    let height=Math.max(50,Math.min(170,v.h*8));
+
+    const bottom=215;
+    const left=200-base/2;
+    const right=200+base/2;
+    const top=bottom-height;
+
+    svg+=`
+
+      <path
+        class="shape draw"
+        d="
+          M ${left} ${bottom}
+          L 200 ${top}
+          L ${right} ${bottom}
+          Z
+        "
+        fill="rgba(39,217,255,.04)"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      ${line(
+        200,
+        top,
+        200,
+        bottom
+      )}
+
+      ${text(
+        210,
+        top+(height/2),
+        'h'
+      )}
+
+      ${text(
+        200,
+        bottom+25,
+        'b'
+      )}
+
+      ${text(
+        left-5,
+        bottom-7,
+        'A'
+      )}
+
+      ${text(
+        right+5,
+        bottom-7,
+        'C'
+      )}
+
+    `;
+
+  }
+
+
+  /* ==============================
+     RECTANGLE
+  ============================== */
+
+  else if(id==='rectangle'){
+
+    const w=Math.max(100,Math.min(260,v.w*8));
+    const h=Math.max(70,Math.min(160,v.h*7));
+
+    const x=200-w/2;
+    const y=130-h/2;
+
+    svg+=`
+
+      <rect
+        class="shape draw pulse"
+        x="${x}"
+        y="${y}"
+        width="${w}"
+        height="${h}"
+        rx="4"
+        fill="rgba(39,217,255,.04)"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      ${line(
+        x,
+        y+h+15,
+        x+w,
+        y+h+15
+      )}
+
+      ${line(
+        x+w+18,
+        y,
+        x+w+18,
+        y+h
+      )}
+
+      ${text(
+        200,
+        y+h+32,
+        'width'
+      )}
+
+      ${text(
+        x+w+38,
+        130,
+        'height'
+      )}
+
+      <line
+        class="shape draw2"
+        x1="${x}"
+        y1="${y}"
+        x2="${x+w}"
+        y2="${y+h}"
+        stroke="#7c5cff"
+        stroke-width="2"
+      />
+
+    `;
+
+  }
+
+
+  /* ==============================
+     SQUARE
+  ============================== */
+
+  else if(id==='square'){
+
+    const size=Math.max(
+      80,
+      Math.min(180,45+v.s*5)
+    );
+
+    const x=200-size/2;
+    const y=130-size/2;
+
+    svg+=`
+
+      <rect
+        class="shape draw pulse"
+        x="${x}"
+        y="${y}"
+        width="${size}"
+        height="${size}"
+        fill="rgba(39,217,255,.04)"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      ${line(
+        x,
+        y+size+15,
+        x+size,
+        y+size+15
+      )}
+
+      ${text(
+        200,
+        y+size+32,
+        's'
+      )}
+
+      <line
+        class="shape draw2"
+        x1="${x}"
+        y1="${y}"
+        x2="${x+size}"
+        y2="${y+size}"
+        stroke="#7c5cff"
+        stroke-width="2"
+      />
+
+    `;
+
+  }
+
+
+  /* ==============================
+     TRAPEZOID
+  ============================== */
+
+  else if(id==='trapezoid'){
+
+    const topW=Math.max(
+      70,
+      Math.min(220,v.a*7)
+    );
+
+    const bottomW=Math.max(
+      100,
+      Math.min(290,v.b*7)
+    );
+
+    const h=Math.max(
+      60,
+      Math.min(150,v.h*7)
+    );
+
+    const topY=55;
+    const bottomY=topY+h;
+
+    const tl=200-topW/2;
+    const tr=200+topW/2;
+    const bl=200-bottomW/2;
+    const br=200+bottomW/2;
+
+    svg+=`
+
+      <path
+        class="shape draw"
+        d="
+          M ${tl} ${topY}
+          L ${tr} ${topY}
+          L ${br} ${bottomY}
+          L ${bl} ${bottomY}
+          Z
+        "
+        fill="rgba(39,217,255,.04)"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      ${line(
+        200,
+        topY,
+        200,
+        bottomY
+      )}
+
+      ${text(
+        210,
+        topY+h/2,
+        'h'
+      )}
+
+      ${text(
+        200,
+        topY-10,
+        'a'
+      )}
+
+      ${text(
+        200,
+        bottomY+22,
+        'b'
+      )}
+
+    `;
+
+  }
+
+
+  /* ==============================
+     POLYGON
+  ============================== */
+
+  else if(id==='polygon'){
+
+    const n=Math.max(
+      3,
+      Math.round(v.n)
+    );
+
+    const radius=88;
+
+    let pts=[];
+
+    for(let i=0;i<n;i++){
+
+      const angle=
+        -Math.PI/2+
+        i*2*Math.PI/n;
+
+      pts.push(
+        `${200+radius*Math.cos(angle)},
+         ${130+radius*Math.sin(angle)}`
+      );
+
+    }
+
+    svg+=`
+
+      <polygon
+        class="shape draw pulse"
+        points="${pts.join(' ')}"
+        fill="rgba(39,217,255,.05)"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+    `;
+
+    /* vertex points */
+
+    for(let i=0;i<n;i++){
+
+      const angle=
+        -Math.PI/2+
+        i*2*Math.PI/n;
+
+      const x=200+radius*Math.cos(angle);
+      const y=130+radius*Math.sin(angle);
+
+      svg+=`
+
+        <circle
+          class="shape draw2"
+          cx="${x}"
+          cy="${y}"
+          r="3.5"
+          fill="#7c5cff"
+        />
+
+      `;
+
+    }
+
+  }
+
+
+  /* ==============================
+     CYLINDER
+  ============================== */
+
+  else if(id==='cylinder'){
+
+    const rx=Math.max(
+      45,
+      Math.min(90,30+v.r*3)
+    );
+
+    const height=Math.max(
+      80,
+      Math.min(170,v.h*5)
+    );
+
+    const top=130-height/2;
+    const bottom=130+height/2;
+
+    svg+=`
+
+      <ellipse
+        class="shape draw"
+        cx="200"
+        cy="${top}"
+        rx="${rx}"
+        ry="22"
+        fill="rgba(39,217,255,.06)"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <ellipse
+        class="shape draw2"
+        cx="200"
+        cy="${bottom}"
+        rx="${rx}"
+        ry="22"
+        fill="rgba(39,217,255,.03)"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <line
+        class="shape draw3"
+        x1="${200-rx}"
+        y1="${top}"
+        x2="${200-rx}"
+        y2="${bottom}"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <line
+        class="shape draw3"
+        x1="${200+rx}"
+        y1="${top}"
+        x2="${200+rx}"
+        y2="${bottom}"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      ${line(
+        200,
+        top,
+        200+rx,
+        top
+      )}
+
+      ${line(
+        200+rx+20,
+        top,
+        200+rx+20,
+        bottom
+      )}
+
+      ${text(
+        200+rx/2,
+        top-9,
+        'r'
+      )}
+
+      ${text(
+        200+rx+40,
+        130,
+        'h'
+      )}
+
+    `;
+
+  }
+
+
+  /* ==============================
+     CONE
+  ============================== */
+
+  else if(id==='cone'){
+
+    const rx=Math.max(
+      50,
+      Math.min(100,35+v.r*3)
+    );
+
+    const height=Math.max(
+      90,
+      Math.min(180,v.h*5)
+    );
+
+    const baseY=210;
+    const apexY=baseY-height;
+
+    svg+=`
+
+      <path
+        class="shape draw"
+        d="
+          M 200 ${apexY}
+          L ${200-rx} ${baseY}
+          L ${200+rx} ${baseY}
+          Z
+        "
+        fill="rgba(39,217,255,.05)"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <ellipse
+        class="shape draw2"
+        cx="200"
+        cy="${baseY}"
+        rx="${rx}"
+        ry="24"
+        fill="none"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <line
+        class="shape draw3"
+        x1="200"
+        y1="${apexY}"
+        x2="200"
+        y2="${baseY}"
+        stroke="#7c5cff"
+        stroke-width="2"
+      />
+
+      ${line(
+        200,
+        baseY,
+        200+rx,
+        baseY
+      )}
+
+      ${text(
+        200+rx/2,
+        baseY-10,
+        'r'
+      )}
+
+      ${text(
+        213,
+        apexY+height/2,
+        'h'
+      )}
+
+    `;
+
+  }
+
+
+  /* ==============================
+     RECTANGULAR PRISM
+  ============================== */
+
+  else if(id==='prism'){
+
+    const w=Math.max(
+      100,
+      Math.min(180,v.w*6)
+    );
+
+    const h=Math.max(
+      70,
+      Math.min(140,v.h*5)
+    );
+
+    const d=Math.max(
+      50,
+      Math.min(100,v.l*4)
+    );
+
+    const x=200-w/2;
+    const y=130-h/2;
+
+    const dx=d*.55;
+    const dy=d*.35;
+
+    svg+=`
+
+      <!-- Front -->
+      <rect
+        class="shape draw"
+        x="${x}"
+        y="${y}"
+        width="${w}"
+        height="${h}"
+        fill="rgba(39,217,255,.04)"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <!-- Back -->
+      <rect
+        class="shape draw2"
+        x="${x+dx}"
+        y="${y-dy}"
+        width="${w}"
+        height="${h}"
+        fill="none"
+        stroke="#27d9ff"
+        stroke-width="2"
+        opacity=".65"
+      />
+
+      <!-- Connecting edges -->
+
+      <line
+        class="shape draw3"
+        x1="${x}"
+        y1="${y}"
+        x2="${x+dx}"
+        y2="${y-dy}"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <line
+        class="shape draw3"
+        x1="${x+w}"
+        y1="${y}"
+        x2="${x+w+dx}"
+        y2="${y-dy}"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <line
+        class="shape draw3"
+        x1="${x}"
+        y1="${y+h}"
+        x2="${x+dx}"
+        y2="${y+h-dy}"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <line
+        class="shape draw3"
+        x1="${x+w}"
+        y1="${y+h}"
+        x2="${x+w+dx}"
+        y2="${y+h-dy}"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      ${line(
+        x,
+        y+h+15,
+        x+w,
+        y+h+15
+      )}
+
+      ${text(
+        200,
+        y+h+32,
+        'width'
+      )}
+
+      ${line(
+        x+w+20,
+        y,
+        x+w+20,
+        y+h
+      )}
+
+      ${text(
+        x+w+42,
+        130,
+        'height'
+      )}
+
+      ${line(
+        x+w,
+        y-5,
+        x+w+dx,
+        y-dy-5
+      )}
+
+      ${text(
+        x+w+dx/2,
+        y-dy-12,
+        'length'
+      )}
+
+    `;
+
+  }
+
+
+  /* ==============================
+     CUBE
+  ============================== */
+
+  else if(id==='cube'){
+
+    const size=Math.max(
+      75,
+      Math.min(130,55+v.s*3)
+    );
+
+    const dx=35;
+    const dy=25;
+
+    const x=200-size/2;
+    const y=135-size/2;
+
+    svg+=`
+
+      <rect
+        class="shape draw"
+        x="${x}"
+        y="${y}"
+        width="${size}"
+        height="${size}"
+        fill="rgba(39,217,255,.04)"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <rect
+        class="shape draw2"
+        x="${x+dx}"
+        y="${y-dy}"
+        width="${size}"
+        height="${size}"
+        fill="none"
+        stroke="#27d9ff"
+        stroke-width="2"
+      />
+
+      <line
+        class="shape draw3"
+        x1="${x}"
+        y1="${y}"
+        x2="${x+dx}"
+        y2="${y-dy}"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <line
+        class="shape draw3"
+        x1="${x+size}"
+        y1="${y}"
+        x2="${x+size+dx}"
+        y2="${y-dy}"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <line
+        class="shape draw3"
+        x1="${x}"
+        y1="${y+size}"
+        x2="${x+dx}"
+        y2="${y+size-dy}"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      <line
+        class="shape draw3"
+        x1="${x+size}"
+        y1="${y+size}"
+        x2="${x+size+dx}"
+        y2="${y+size-dy}"
+        stroke="#27d9ff"
+        stroke-width="3"
+      />
+
+      ${line(
+        x,
+        y+size+15,
+        x+size,
+        y+size+15
+      )}
+
+      ${text(
+        200,
+        y+size+32,
+        's'
+      )}
+
+    `;
+
+  }
+
+
+  /* ==============================
+     FINISH SVG
+  ============================== */
+
+  svg+=`</svg>`;
+
+  el.innerHTML=svg;
+
 }
+
 </script>
+
 </body>
 </html>
+```
+
+This keeps your existing calculator structure and formulas, but the visualization is now driven by the actual values for **circle, sphere, triangle, rectangle, square, trapezoid, polygon, prism, cube, cylinder, cone, and triangle angles**. Your original polygon already generated its vertices from `values.n`; this version applies the same idea to the other visualizations.
+
+One particularly useful difference is that **the shapes themselves now resize/change when you move the sliders**, rather than only the numerical answer changing.
